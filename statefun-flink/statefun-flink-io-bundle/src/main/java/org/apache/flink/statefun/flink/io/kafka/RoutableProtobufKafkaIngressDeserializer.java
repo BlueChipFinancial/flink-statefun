@@ -45,7 +45,10 @@ public final class RoutableProtobufKafkaIngressDeserializer
   public Message deserialize(ConsumerRecord<byte[], byte[]> input) {
     final String topic = input.topic();
     final byte[] payload = input.value();
-    final String id = new String(input.key(), StandardCharsets.UTF_8);
+    String id = "";
+    if (input.key() != null) {
+      id = new String(input.key(), StandardCharsets.UTF_8);
+    }
 
     final RoutingConfig routingConfig = routingConfigs.get(topic);
     if (routingConfig == null) {
